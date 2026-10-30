@@ -17,6 +17,7 @@ Pelanggan (tanpa login):
 - Melihat subtotal, diskon, dan total langsung saat mengisi form.
 - Menerima kode order berformat `DK-1234`.
 - Mengecek status pesanan di halaman cek status dengan kode tersebut.
+- Memasang aplikasi ke layar utama HP (PWA) lewat menu browser "Tambahkan ke Layar Utama".
 
 Admin (login email dan kata sandi di `/admin`):
 
