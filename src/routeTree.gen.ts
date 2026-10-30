@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as CekStatusRouteImport } from './routes/cek-status'
+import { Route as PesanMenuIdRouteImport } from './routes/pesan.$menuId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CekStatusRoute = CekStatusRouteImport.update({
+  id: '/cek-status',
+  path: '/cek-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PesanMenuIdRoute = PesanMenuIdRouteImport.update({
+  id: '/pesan/$menuId',
+  path: '/pesan/$menuId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/cek-status': typeof CekStatusRoute
+  '/pesan/$menuId': typeof PesanMenuIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/cek-status': typeof CekStatusRoute
+  '/pesan/$menuId': typeof PesanMenuIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/cek-status': typeof CekStatusRoute
+  '/pesan/$menuId': typeof PesanMenuIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/admin' | '/cek-status' | '/pesan/$menuId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/admin' | '/cek-status' | '/pesan/$menuId'
+  id: '__root__' | '/' | '/admin' | '/cek-status' | '/pesan/$menuId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  CekStatusRoute: typeof CekStatusRoute
+  PesanMenuIdRoute: typeof PesanMenuIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cek-status': {
+      id: '/cek-status'
+      path: '/cek-status'
+      fullPath: '/cek-status'
+      preLoaderRoute: typeof CekStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pesan/$menuId': {
+      id: '/pesan/$menuId'
+      path: '/pesan/$menuId'
+      fullPath: '/pesan/$menuId'
+      preLoaderRoute: typeof PesanMenuIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  CekStatusRoute: CekStatusRoute,
+  PesanMenuIdRoute: PesanMenuIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
