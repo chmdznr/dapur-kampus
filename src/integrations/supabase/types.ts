@@ -14,16 +14,137 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      menus: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          image_url: string | null
+          is_active: boolean
+          name: string
+          price: number
+          stock: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name: string
+          price: number
+          stock?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name?: string
+          price?: number
+          stock?: number
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          created_at: string
+          customer_name: string
+          discount: number
+          id: string
+          menu_id: string | null
+          menu_name: string
+          notes: string | null
+          order_code: string
+          pickup_time: string
+          promo_code: string | null
+          quantity: number
+          status: string
+          subtotal: number
+          total_price: number
+          unit_price: number
+          whatsapp: string
+        }
+        Insert: {
+          created_at?: string
+          customer_name: string
+          discount?: number
+          id?: string
+          menu_id?: string | null
+          menu_name: string
+          notes?: string | null
+          order_code: string
+          pickup_time: string
+          promo_code?: string | null
+          quantity: number
+          status?: string
+          subtotal: number
+          total_price: number
+          unit_price: number
+          whatsapp: string
+        }
+        Update: {
+          created_at?: string
+          customer_name?: string
+          discount?: number
+          id?: string
+          menu_id?: string | null
+          menu_name?: string
+          notes?: string | null
+          order_code?: string
+          pickup_time?: string
+          promo_code?: string | null
+          quantity?: number
+          status?: string
+          subtotal?: number
+          total_price?: number
+          unit_price?: number
+          whatsapp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_menu_id_fkey"
+            columns: ["menu_id"]
+            isOneToOne: false
+            referencedRelation: "menus"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +271,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
