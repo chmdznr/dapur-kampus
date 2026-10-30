@@ -69,5 +69,5 @@ Aturan ini dijaga di dua tempat:
 - Tidak ada pembatasan jumlah permintaan dan tidak ada CAPTCHA, jadi pembuatan order dan percobaan menebak kode tidak dibatasi.
 - Nomor WhatsApp hanya diperiksa formatnya, tidak diverifikasi.
 - Tidak ada pembayaran. Stok tidak dikembalikan saat order dibatalkan.
-- Pendaftaran di `/admin` terbuka untuk siapa saja; yang pertama mendaftar menjadi admin. Untuk produksi, pendaftaran ini perlu ditutup setelah admin pertama dibuat.
+- Tombol pendaftaran di `/admin` sudah dihapus setelah akun admin pertama dibuat. Akun yang mendaftar lewat API sesudahnya tidak mendapat peran admin, tetapi untuk produksi pendaftaran perlu dimatikan di pengaturan Auth.
 - Jangan dipakai untuk data nyata.

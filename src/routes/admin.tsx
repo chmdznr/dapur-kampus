@@ -38,8 +38,8 @@ function AdminPage() {
   return <AdminOrders userId={session.user.id} email={session.user.email ?? ""} />;
 }
 
+// Pendaftaran sengaja tidak disediakan: akun admin sudah dibuat sebelum aplikasi dipublikasikan.
 function LoginForm() {
-  const [mode, setMode] = useState<"masuk" | "daftar">("masuk");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -47,32 +47,19 @@ function LoginForm() {
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setBusy(true);
-    if (mode === "masuk") {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) toast.error("Email atau kata sandi salah");
-    } else {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo: `${window.location.origin}/admin` },
-      });
-      if (error) toast.error(error.message);
-      else if (!data.session) toast.success("Cek email untuk konfirmasi akun, lalu masuk.");
-    }
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) toast.error("Email atau kata sandi salah");
     setBusy(false);
   }
 
   return (
     <div className="max-w-sm mx-auto rounded-2xl border bg-card shadow-card p-6">
-      <h1 className="text-2xl font-extrabold mb-4">{mode === "masuk" ? "Masuk admin" : "Daftar admin"}</h1>
+      <h1 className="text-2xl font-extrabold mb-4">Masuk admin</h1>
       <form onSubmit={onSubmit} className="space-y-3">
         <div><Label htmlFor="email">Email</Label><Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
         <div><Label htmlFor="pw">Kata sandi</Label><Input id="pw" type="password" minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} required /></div>
-        <Button type="submit" className="w-full rounded-full" disabled={busy}>{mode === "masuk" ? "Masuk" : "Daftar"}</Button>
+        <Button type="submit" className="w-full rounded-full" disabled={busy}>Masuk</Button>
       </form>
-      <button type="button" className="mt-3 text-sm text-muted-foreground underline" onClick={() => setMode(mode === "masuk" ? "daftar" : "masuk")}>
-        {mode === "masuk" ? "Belum punya akun? Daftar" : "Sudah punya akun? Masuk"}
-      </button>
     </div>
   );
 }

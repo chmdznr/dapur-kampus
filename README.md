@@ -81,7 +81,7 @@ Commit awal bernama "Changes" dibuat otomatis oleh Lovable. Commit berikutnya me
 - Kode order hanya empat digit, sehingga bisa ditebak. Siapa pun yang tahu kodenya dapat melihat status order.
 - Nomor WhatsApp tidak diverifikasi.
 - Stok tidak dikembalikan saat order dibatalkan.
-- Halaman `/admin` menyediakan pendaftaran; akun pertama yang terdaftar otomatis menjadi admin.
+- Halaman `/admin` hanya untuk masuk; tombol pendaftaran sudah dihapus setelah akun admin dibuat. Pendaftaran lewat API tetap perlu dimatikan di pengaturan Auth.
 
 ## Dibuat dengan
 
