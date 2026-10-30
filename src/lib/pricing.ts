@@ -5,6 +5,12 @@ export const PROMO_RATE = 0.1;
 export const PROMO_MIN_SUBTOTAL = 50000;
 
 export function calculateSubtotal(unitPrice: number, quantity: number): number {
+  if (!Number.isInteger(unitPrice) || unitPrice < 0) {
+    throw new RangeError("Harga harus bilangan bulat >= 0");
+  }
+  if (!Number.isInteger(quantity) || quantity < 1) {
+    throw new RangeError("Jumlah harus bilangan bulat >= 1");
+  }
   return unitPrice * quantity;
 }
 

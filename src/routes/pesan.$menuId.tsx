@@ -66,9 +66,10 @@ function OrderPage() {
 
   if (!menu) return null;
   const qty = Number.isFinite(quantity) && quantity > 0 ? quantity : 0;
-  const subtotal = calculateSubtotal(menu.price, qty);
-  const discount = calculateDiscount(menu.price, qty, promo);
-  const total = calculateTotal(menu.price, qty, promo);
+  // Selama kolom jumlah kosong, ringkasan harga tampil nol.
+  const subtotal = qty > 0 ? calculateSubtotal(menu.price, qty) : 0;
+  const discount = qty > 0 ? calculateDiscount(menu.price, qty, promo) : 0;
+  const total = qty > 0 ? calculateTotal(menu.price, qty, promo) : 0;
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();

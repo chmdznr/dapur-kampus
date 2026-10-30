@@ -25,3 +25,31 @@ describe("pricing", () => {
     expect(calculateDiscount(10001, 5, "NUSA10")).toBe(5001); // 5000.5 -> 5001
   });
 });
+
+describe("tabel kasus promo", () => {
+  it.each([
+    // harga, jumlah, kode, subtotal, diskon, total
+    [25000, 1, "", 25000, 0, 25000],
+    [25000, 2, "SALAH", 50000, 0, 50000],
+    [20000, 2, "NUSA10", 40000, 0, 40000],
+    [25000, 2, "NUSA10", 50000, 5000, 45000],
+    [30000, 2, "NUSA10", 60000, 6000, 54000],
+    [33333, 2, "NUSA10", 66666, 6667, 59999],
+  ])("%i x %i dengan kode '%s'", (harga, jumlah, kode, subtotal, diskon, total) => {
+    expect(calculateSubtotal(harga, jumlah)).toBe(subtotal);
+    expect(calculateDiscount(harga, jumlah, kode)).toBe(diskon);
+    expect(calculateTotal(harga, jumlah, kode)).toBe(total);
+  });
+});
+
+describe("input tidak valid ditolak", () => {
+  it("harga negatif", () => {
+    expect(() => calculateSubtotal(-1, 1)).toThrow(RangeError);
+    expect(() => calculateTotal(-1, 2, "NUSA10")).toThrow(RangeError);
+  });
+  it("jumlah nol, negatif, atau pecahan", () => {
+    expect(() => calculateSubtotal(25000, 0)).toThrow(RangeError);
+    expect(() => calculateDiscount(25000, -1, "NUSA10")).toThrow(RangeError);
+    expect(() => calculateSubtotal(25000, 1.5)).toThrow(RangeError);
+  });
+});
