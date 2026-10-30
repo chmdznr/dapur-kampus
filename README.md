@@ -25,7 +25,7 @@ Admin (login email dan kata sandi di `/admin`):
 
 ## Link aplikasi
 
-Link aplikasi: (menyusul setelah publish)
+Link aplikasi: <https://dapur-kampus-delivery.lovable.app>
 
 ## Alur
 
