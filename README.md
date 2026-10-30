@@ -1,24 +1,88 @@
-# Dapur Kampus
+# DapurKampus
 
-Buat aplikasi web "DapurKampus" berbahasa Indonesia: pre-order makanan dari UMKM sekitar kampus. Tampilkan banner kecil "Prototipe — jangan masukkan data pribadi" di setiap halaman. Pakai database dengan dua tabel: menus (name, description, price integer rupiah, stock, image_url, is_active) dan orders (order_code unik pendek misal DK-4821, customer_name, whatsapp, menu_id, menu_name, quantity, unit_price, promo_code, subtotal, discount, total_price, pickup_time, status, notes, created_at). Isi 5 menu contoh makanan kampus fiktif (harga 10.000–30.000, salah satunya 25.000). Halaman pelanggan tanpa login: (1) daftar menu aktif berupa kartu dengan gambar, harga format Rp, dan stok; (2) form pesan satu menu: jumlah, waktu ambil, nama, nomor WhatsApp, kode promo, catatan; tampilkan ringkasan Subtotal, Diskon, Total secara langsung saat input berubah; (3) setelah kirim, tampilkan kode order; (4) halaman cek status order dengan memasukkan kode order. Status order: Baru, Dikonfirmasi, Diproses, Siap Diambil, Selesai, Dibatalkan; order baru selalu berstatus Baru. Halaman admin /admin wajib login email-password: daftar order terbaru dengan detail dan tombol untuk mengubah status sesuai urutan, plus tombol Batalkan. Pengunjung anonim hanya boleh membaca menu, membuat order baru berstatus Baru, dan membaca status order; hanya admin yang boleh mengubah order. PENTING: semua perhitungan harga taruh di file src/lib/pricing.ts sebagai fungsi murni calculateSubtotal(unitPrice, quantity), calculateDiscount(unitPrice, quantity, promoCode), calculateTotal(unitPrice, quantity, promoCode) dengan aturan: kode promo NUSA10 (persis, huruf besar) memberi diskon 10% dibulatkan ke rupiah terdekat jika subtotal minimal Rp50.000; kode lain diskon 0. Komponen UI hanya memanggil fungsi-fungsi ini. Desain bersih, ramah ponsel, warna hangat.
+Aplikasi web pre-order makanan dari UMKM di sekitar kampus: pelanggan memesan tanpa login, admin mengelola status pesanan.
 
-This project was built with [Lovable](https://lovable.dev).
+> Prototipe untuk materi workshop — semua data fiktif. Jangan memasukkan data pribadi.
 
-## Build with Lovable
+## Masalah
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/25e7648f-c6b4-4c90-8c0e-9cdb79ba9fb4).
+Pedagang kecil di sekitar kampus sering menerima pesanan lewat chat yang tercecer, sehingga stok, waktu ambil, dan status pesanan sulit dilacak. DapurKampus mengumpulkan semuanya dalam satu alur sederhana.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+## Fitur
 
-## Development
+Pelanggan (tanpa login):
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+- Melihat daftar menu aktif beserta harga dan stok.
+- Memesan satu menu: jumlah, waktu ambil, nama, nomor WhatsApp, kode promo, catatan.
+- Melihat subtotal, diskon, dan total langsung saat mengisi form.
+- Menerima kode order berformat `DK-1234`.
+- Mengecek status pesanan di halaman cek status dengan kode tersebut.
+
+Admin (login email dan kata sandi di `/admin`):
+
+- Melihat 100 order terbaru beserta detailnya.
+- Memajukan status satu langkah demi satu langkah, atau membatalkan order.
+
+## Link aplikasi
+
+Link aplikasi: (menyusul setelah publish)
+
+## Alur
+
+![Diagram alur DapurKampus](docs/flowchart.png)
+
+Sumber diagram ada di `docs/flowchart.mmd`. Penjelasan lengkap ada di [docs/business-rules.md](docs/business-rules.md) dan [docs/data-dictionary.md](docs/data-dictionary.md).
+
+## Aturan promo NUSA10
+
+Kode `NUSA10` memberi diskon 10% (dibulatkan ke rupiah terdekat) jika subtotal minimal Rp50.000. Kode harus persis huruf besar. Kode lain tidak memberi diskon.
+
+| Harga | Jumlah | Kode | Subtotal | Diskon | Total |
+|---|---|---|---|---|---|
+| 25.000 | 2 | `NUSA10` | 50.000 | 5.000 | 45.000 |
+| 20.000 | 2 | `NUSA10` | 40.000 | 0 | 40.000 |
+| 33.333 | 2 | `NUSA10` | 66.666 | 6.667 | 59.999 |
+| 25.000 | 2 | `nusa10` | 50.000 | 0 | 50.000 |
+
+## Struktur repo
+
+```
+src/lib/pricing.ts           semua perhitungan harga (fungsi murni)
+src/lib/pricing.test.ts      test untuk pricing.ts
+src/lib/orders.functions.ts  server function: buat order, cek status
+src/lib/order-status.ts      urutan status dan aturan pembatalan di UI
+src/routes/                  halaman: index, pesan.$menuId, cek-status, admin
+drizzle/migrations/          skema database (SQL)
+.github/workflows/test.yml   CI: menjalankan test
+docs/                        aturan bisnis, kamus data, diagram alur
+```
+
+## Cara menjalankan test
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+bun install
+bun run test
 ```
+
+GitHub Actions menjalankan perintah yang sama pada setiap push.
+
+## Cara pengembangan
+
+Proyek ini dapat dilanjutkan di [Lovable editor](https://lovable.dev/projects/25e7648f-c6b4-4c90-8c0e-9cdb79ba9fb4). Push ke branch `main` akan tersinkron ke Lovable. Jangan melakukan force-push atau menulis ulang riwayat commit, karena riwayat proyek di sisi Lovable bisa hilang.
+
+## Riwayat commit
+
+Commit awal bernama "Changes" dibuat otomatis oleh Lovable. Commit berikutnya memakai pesan deskriptif bergaya conventional commits, misalnya `feat:`, `ci:`, dan `docs:`.
+
+## Batasan prototipe
+
+- Satu order hanya berisi satu menu. Tidak ada pembayaran online; pembayaran dianggap di tempat.
+- Harga dan total dihitung ulang di server, tetapi tidak ada pembatasan jumlah permintaan (rate limit) maupun CAPTCHA.
+- Kode order hanya empat digit, sehingga bisa ditebak. Siapa pun yang tahu kodenya dapat melihat status order.
+- Nomor WhatsApp tidak diverifikasi.
+- Stok tidak dikembalikan saat order dibatalkan.
+- Halaman `/admin` menyediakan pendaftaran; akun pertama yang terdaftar otomatis menjadi admin.
+
+## Dibuat dengan
+
+[Lovable](https://lovable.dev), [TanStack Start](https://tanstack.com/start), Supabase (Lovable Cloud), dan [Vitest](https://vitest.dev).

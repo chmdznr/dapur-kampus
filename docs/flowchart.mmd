@@ -1,0 +1,18 @@
+flowchart TD
+    A([Pelanggan buka menu]) --> B{Menu aktif<br/>dan stok ada?}
+    B -- Tidak --> B1[Menu tidak bisa dipesan]
+    B -- Ya --> C[Isi jumlah, waktu ambil,<br/>nama, WhatsApp, promo]
+    C --> D[Hitung subtotal]
+    D --> E{Kode NUSA10 dan<br/>subtotal >= 50.000?}
+    E -- Ya --> F[Diskon 10%]
+    E -- Tidak --> G[Tanpa diskon]
+    F --> H[Hitung total]
+    G --> H
+    H --> I[Kirim pesanan]
+    I --> J[Dapat kode order<br/>Status: Baru]
+    J --> K{Admin<br/>konfirmasi?}
+    K -- Batal --> L([Dibatalkan])
+    K -- Ya --> M[Dikonfirmasi]
+    M --> N[Diproses]
+    N --> O[Siap Diambil]
+    O --> P([Selesai])
