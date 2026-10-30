@@ -72,7 +72,10 @@ function OrderPage() {
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    if (qty < 1 || qty > menu!.stock) return toast.error(`Jumlah harus 1–${menu!.stock}`);
+    if (qty < 1 || qty > menu!.stock) {
+      toast.error(`Jumlah harus 1–${menu!.stock}`);
+      return;
+    }
     setBusy(true);
     try {
       const res = await submit({
