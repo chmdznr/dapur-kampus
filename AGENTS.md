@@ -12,3 +12,4 @@
 - All price math lives in src/lib/pricing.ts as pure functions; UI and server functions only call them (single source of truth, tested in pricing.test.ts).
 - Anonymous order creation and status lookup go through server functions in src/lib/orders.functions.ts (prices recomputed server-side); anon has no direct access to the orders table.
 - Order status transitions are enforced by a DB trigger; the first registered user is auto-granted admin via user_roles.
+- Online payment uses Shopify Storefront cart checkout (src/lib/shopify.ts); Shopify products are matched to menus by exact name, so keep names identical in both places.
