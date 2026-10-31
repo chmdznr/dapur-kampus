@@ -10,7 +10,7 @@ Semua perhitungan harga ada di `src/lib/pricing.ts`. Halaman form dan server fun
 - Menu harus aktif dan stoknya cukup. Jumlah tidak boleh melebihi stok.
 - Waktu ambil harus di masa depan.
 - Nomor WhatsApp harus berformat nomor seluler Indonesia (lihat catatan di bawah).
-- Pembayaran dilakukan di tempat saat pengambilan. Aplikasi tidak memproses pembayaran.
+- Pembayaran di tempat saat pengambilan, atau online lewat Shopify (tombol "Bayar online sekarang" setelah order terkirim). Kode NUSA10 hanya dikirim ke Shopify bila `calculateDiscount` > 0.
 - Pelanggan tidak perlu login. Setiap pesanan mendapat kode order berformat `DK-1234` (empat digit acak) untuk mengecek status.
 
 Catatan format WhatsApp: pola yang dipakai server adalah `^(\+62|62|0)8[0-9]{7,12}$`, yaitu awalan `+62`, `62`, atau `0`, lalu angka `8` dan 7 sampai 12 digit.
