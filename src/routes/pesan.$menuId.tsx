@@ -3,10 +3,11 @@ import { queryOptions, useSuspenseQuery, useQueryClient } from "@tanstack/react-
 import { useServerFn } from "@tanstack/react-start";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, CreditCard, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { calculateDiscount, calculateSubtotal, calculateTotal, formatRupiah } from "@/lib/pricing";
 import { createOrder } from "@/lib/orders.functions";
+import { createCheckoutForOrder } from "@/lib/shopify";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -63,6 +64,7 @@ function OrderPage() {
   const [notes, setNotes] = useState("");
   const [busy, setBusy] = useState(false);
   const [orderCode, setOrderCode] = useState<string | null>(null);
+  const [paying, setPaying] = useState(false);
 
   if (!menu) return null;
   const qty = Number.isFinite(quantity) && quantity > 0 ? quantity : 0;
@@ -100,6 +102,23 @@ function OrderPage() {
     }
   }
 
+  async function payOnline() {
+    if (!orderCode) return;
+    // Buka tab dulu agar tidak diblokir browser, lalu arahkan ke halaman bayar.
+    const win = window.open("", "_blank");
+    setPaying(true);
+    try {
+      const url = await createCheckoutForOrder({ menuName: menu!.name, quantity: qty, promoCode: promo, orderCode });
+      if (win) win.location.href = url;
+      else window.open(url, "_blank");
+    } catch (err) {
+      win?.close();
+      toast.error(err instanceof Error ? err.message : "Gagal membuka pembayaran");
+    } finally {
+      setPaying(false);
+    }
+  }
+
   if (orderCode) {
     return (
       <div className="max-w-md mx-auto text-center rounded-3xl bg-card border shadow-card p-8">
@@ -108,7 +127,12 @@ function OrderPage() {
         <p className="text-muted-foreground mt-1">Simpan kode order ini untuk cek status:</p>
         <div className="font-display text-4xl font-extrabold text-primary tracking-wider my-5">{orderCode}</div>
         <div className="flex flex-col gap-2">
-          <Button asChild className="rounded-full"><Link to="/cek-status" search={{ kode: orderCode }}>Cek status order</Link></Button>
+          <Button onClick={payOnline} disabled={paying} size="lg" className="rounded-full">
+            {paying ? <Loader2 className="size-4 animate-spin" /> : <CreditCard className="size-4" />}
+            Bayar online sekarang ({formatRupiah(total)})
+          </Button>
+          <p className="text-xs text-muted-foreground">Atau bayar di tempat saat mengambil pesanan.</p>
+          <Button asChild variant="outline" className="rounded-full"><Link to="/cek-status" search={{ kode: orderCode }}>Cek status order</Link></Button>
           <Button asChild variant="ghost"><Link to="/">Kembali ke menu</Link></Button>
         </div>
       </div>
