@@ -108,7 +108,7 @@ function OrderPage() {
     const win = window.open("", "_blank");
     setPaying(true);
     try {
-      const url = await createCheckoutForOrder({ menuName: menu!.name, quantity: qty, promoCode: promo, orderCode });
+      const url = await createCheckoutForOrder({ menuName: menu!.name, quantity: qty, promoCode: discount > 0 ? promo : "", orderCode });
       if (win) win.location.href = url;
       else window.open(url, "_blank");
     } catch (err) {
