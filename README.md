@@ -55,7 +55,7 @@ src/lib/order-status.ts      urutan status dan aturan pembatalan di UI
 src/routes/                  halaman: index, pesan.$menuId, cek-status, admin
 drizzle/migrations/          skema database (SQL)
 .github/workflows/test.yml   CI: menjalankan test
-docs/                        aturan bisnis, kamus data, diagram alur
+docs/                        aturan bisnis, kamus data, diagram alur, prompt awal
 ```
 
 ## Cara menjalankan test
@@ -69,7 +69,7 @@ GitHub Actions menjalankan perintah yang sama pada setiap push.
 
 ## Cara pengembangan
 
-Proyek ini dapat dilanjutkan di [Lovable editor](https://lovable.dev/projects/25e7648f-c6b4-4c90-8c0e-9cdb79ba9fb4). Push ke branch `main` akan tersinkron ke Lovable. Jangan melakukan force-push atau menulis ulang riwayat commit, karena riwayat proyek di sisi Lovable bisa hilang.
+Proyek ini dapat dilanjutkan di [Lovable editor](https://lovable.dev/projects/25e7648f-c6b4-4c90-8c0e-9cdb79ba9fb4). Prompt yang dipakai untuk membuat versi pertamanya ada di [docs/prompt-awal.md](docs/prompt-awal.md). Push ke branch `main` akan tersinkron ke Lovable. Jangan melakukan force-push atau menulis ulang riwayat commit, karena riwayat proyek di sisi Lovable bisa hilang.
 
 ## Riwayat commit
 
